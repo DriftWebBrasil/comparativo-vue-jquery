@@ -1,9 +1,13 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
     class Api{
 
         public $conn;
 
-        public function __contruct($dbServer = 'localhost', $dbName = 'compartilhando', $dbUserName = 'root', $dbPassword = 'root')
+        public function __construct($dbServer = 'localhost', $dbName = 'compartilhando', $dbUserName = 'dev', $dbPassword = 'dev')
         {
             $this->conn = new PDO("mysql:host={$dbServer};dbname={$dbName}", $dbUserName, $dbPassword);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -11,9 +15,10 @@
 
         public function listaTarefas()
         {
-            $data = $this->conn->query("SELECT * FROM todos");
-            $resultado = $data->fetchAll();
-            $this->result($resultado);
+            $sth = $this->conn->prepare("SELECT * FROM todos");
+            $sth->execute();
+            $result = $sth->fetchAll(PDO::FETCH_ASSOC);
+            $this->result($result);
         }
 
         public function editarTarefa()
