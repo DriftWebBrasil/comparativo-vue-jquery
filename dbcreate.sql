@@ -9,3 +9,7 @@ create table todos(
     descricao varchar(100),
     concluida tinyint
 );
+
+INSERT INTO todos(descricao, concluida) VALUES('Limpar a casa', 0);
+INSERT INTO todos(descricao, concluida) VALUES('Estudar C++', 0);
+INSERT INTO todos(descricao, concluida) VALUES('Estudar Javascript', 0);
