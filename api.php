@@ -84,7 +84,7 @@ error_reporting(E_ALL);
 
     $todosApi = new Api();
 
-    if(isset($_GET['funcao'])){
+    if(isset($_GET['funcao']) || isset($_POST['funcao'])){
         switch($_GET['funcao']){
             case 'listar':
                 $todosApi->listaTarefas();
@@ -96,12 +96,28 @@ error_reporting(E_ALL);
                 $todosApi->deletarTarefa();
                 break;
             default:
-                $todosApi->result(array('status' => 'error', 'message' => 'Função não definida'));
+                $todosApi->result(array('status' => 'error', 'message' => 'Função não definida', 'post' => print_r($_POST, true), 'GET' => print_r($_GET, true)));
+                break;
+
+        }
+
+        switch($_POST['funcao']){
+            case 'listar':
+                $todosApi->listaTarefas();
+                break;
+            case 'editar':
+                $todosApi->editarTarefa();
+                break;
+            case 'deletarTarefa':
+                $todosApi->deletarTarefa();
+                break;
+            default:
+                $todosApi->result(array('status' => 'error', 'message' => 'Função não definida', 'post' => print_r($_POST, true), 'GET' => print_r($_GET, true)));
                 break;
 
         }
     } else {
-        $todosApi->result(array('status' => 'error', 'message' => 'função não definida'));
+        $todosApi->result(array('status' => 'error', 'message' => 'função não definida', 'post' => print_r($_POST, true), 'GET' => print_r($_GET, true)));
     }
 
 

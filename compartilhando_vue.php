@@ -15,31 +15,36 @@
 
     <body>
         <div id="app" class="container">
+
+            <!--  TITULO E LISTAR-->
             <div class="row">
                 <div class="col">
                     <h3>Todos</h3>
                 </div>
                 <div class="col" style="margin-top: 40px;">
-                    <a class="waves-effect waves-light btn-small teal" @click="listaTodos"><i class="material-icons left">list</i>Listar Todos</a>
+                    <a class="waves-effect waves-light btn-small teal" @click="listarTodos"><i class="material-icons left">list</i>Listar Todos</a>
                 </div>
             </div>
 
-            <div class="row"><div class="col" id="mensagem" v-html="mensagem"></div></div>
+            <div class="row"><div class="col" id="mensagem"></div></div>
 
+            <!--  NOVA TAREFA  -->
             <div class="row">
                 <div class="col s6">
-                    <input type="text" placeholder="Descrição" v-model="novoTodo.descricao">
+                    <input type="text" placeholder="Descrição">
                 </div>
                 <div class="col s1">
                     <label>
-                        <input type="checkbox" class="filled-in" v-model="novoTodo.concluida" />
+                        <input type="checkbox" class="filled-in" />
                         <span></span>
                     </label>
                 </div>
                 <div class="col s5">
-                    <a class="waves-effect waves-light btn-small blue" @click="salvarTodo(novoTodo)"><i class="material-icons left">add_circle_outline</i>Adicionar</a>
+                    <a class="waves-effect waves-light btn-small blue"><i class="material-icons left">add_circle_outline</i>Adicionar</a>
                 </div>
             </div>
+
+            <!-- LISTA TAREFAS -->
             <div class="row">
                 <div class="col s12">
                     <table class="striped centered responsive">
@@ -51,19 +56,19 @@
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr v-for="(todo, index) in todos" :key="index">
+                        <tbody>.-
+                            <tr v-if="todos" v-for="(index, todo) in todos" :key="index">
                                 <td>{{todo.id}}</td>
-                                <td><input type="text" v-model="todo.descricao" /></td>
+                                <td><input type="text" v-model="todo.descricao"/></td>
                                 <td>
                                     <label>
-                                        <input type="checkbox" class="filled-in" v-model="todo.concluida"  true-value="1" false-value="0"/>
+                                        <input type="checkbox" class="filled-in" v-model="todo.concluida" true-value="1" false-value="0"/>
                                         <span></span>
                                     </label>
                                 </td>
                                 <td>
-                                    <a class="waves-effect waves-light btn-small" @click="salvarTodo(todo)"><i class="material-icons left">save</i>Salvar</a>
-                                    <a class="waves-effect waves-light btn-small red" @click="deletarTarefa(todo)"><i class="material-icons left">delete</i>Excluir</a>
+                                    <a class="waves-effect waves-light btn-small"><i class="material-icons left">save</i>Salvar</a>
+                                    <a class="waves-effect waves-light btn-small red"><i class="material-icons left">delete</i>Excluir</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -77,44 +82,32 @@
                 el: '#app',
                 
                 data: {
-                    todos: [],
-                    novoTodo: [],
-                    mensagem: ''
-                },
+                    novoTodo: [
 
-                computed(){
+                    ],
+                    todos: []
                 },
 
                 mounted(){
                     console.log('carregou vuejs')
-                    this.listaTodos();
-                    this.limpaFormulario();
                 },
 
                 methods: {
-                    listaTodos(){
+                    novoTodo(){
+
+                    },
+
+                    listarTodos(){
                         axios.get('http://127.0.0.1/vuejscompartilhando/api.php?funcao=listar')
-                        .then(response =>{
-                            this.todos = response.data.message
-                        })
-                        .catch(response => {
-                            console.log('Erro na listagem');
-                        })
+                            .then(response =>{
+                                this.todos = response.data.message
+                            })
+                            .catch(response => {
+                                console.log('Erro na listagem');
+                            })
                     },
 
-                    limpaFormulario(){
-                        this.novoTodo = {
-                            'id': '',
-                            'descricao': '',
-                            'concluida': ''
-                        }
-                    },
-
-                    salvarTodo(todo){
-                        this.limpaFormulario();
-                        let formData = new FormData();
-                        formData.append('funcao', 'editarTarefa');
-                        formData.append('todo', JSON.stringify(todo));
+                    editar(){
                         axios.post('http://127.0.0.1/vuejscompartilhando/api.php?funcao=editar', formData)
                             .then(response =>{
                                 this.todos = response.data.mensagem
@@ -126,10 +119,7 @@
                             }).finally(response => this.listaTodos())
                     },
 
-                    deletarTarefa(todo){
-                        let formData = new FormData();
-                        formData.append('funcao', 'deletarTarefa');
-                        formData.append('todo', JSON.stringify(todo));
+                    deletarTodo(){
                         axios.post('http://127.0.0.1/vuejscompartilhando/api.php?funcao=deletarTarefa', formData)
                             .then(response =>{
                                 this.todos = response.data.mensagem
@@ -140,6 +130,7 @@
                                 this.mensagem = error.response.data.message;
                             }).finally(response => this.listaTodos())
                     }
+
                 }
 
             })
