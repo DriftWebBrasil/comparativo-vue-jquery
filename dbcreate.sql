@@ -7,7 +7,7 @@ drop table if exists todos;
 create table todos(
     id integer PRIMARY KEY AUTO_INCREMENT,
     descricao varchar(100),
-    concluida tinyint
+    concluida tinyint default 0
 );
 
 INSERT INTO todos(descricao, concluida) VALUES('Limpar a casa', 0);

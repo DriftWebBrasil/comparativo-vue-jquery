@@ -794,6 +794,7 @@ SELECT|sys.sys_config:null
     <column id="245" parent="242" name="concluida">
       <Position>3</Position>
       <DataType>tinyint(4)|0s</DataType>
+      <DefaultExpression>0</DefaultExpression>
     </column>
     <key id="246" parent="242" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
